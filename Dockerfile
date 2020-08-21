@@ -24,6 +24,7 @@ RUN docker-php-ext-install \
     exif \
     -j$(nproc) \
     gd \
+    intl \
     pdo \
     pdo_mysql \
     soap \
