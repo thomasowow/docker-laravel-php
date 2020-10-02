@@ -11,11 +11,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN pecl install \
     imagick \
-    mcrypt-1.0.3
+    mcrypt-1.0.3 \
+    redis
 
 RUN docker-php-ext-enable \
     imagick \
-    mcrypt
+    mcrypt \
+    redis
 
 RUN docker-php-ext-configure \
     gd --with-freetype --with-jpeg
