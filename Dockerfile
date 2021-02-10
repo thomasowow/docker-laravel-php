@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y \
     unzip
 
 RUN pecl install \
-    imagick \
-    mcrypt-1.0.3 \
     redis
 
 RUN docker-php-ext-enable \
-    imagick \
-    mcrypt \
     redis
+
+RUN mkdir -p /usr/src/php/ext/imagick; \
+    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
+    docker-php-ext-install imagick;
 
 RUN docker-php-ext-configure \
     gd --with-freetype --with-jpeg
@@ -33,8 +33,6 @@ RUN docker-php-ext-install \
     zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN composer global require hirak/prestissimo
 
 ENV NODE_VERSION=12.18.3
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
